@@ -1,0 +1,21 @@
+## ###############
+## Network configuration
+## Containers without a netowrk are isolated from other containers, but have outgoing access enabled by default
+## ###############
+
+# By default, docker blocks incoming connections, except for network: host, and port mappings
+networks:
+
+  # Allows a container to connect to the internet outside of the other docker containers
+  internal-in-external-out:
+    name: internal-in-external-out
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16 # Subnet ips are presedined here so swag knows what are trusted proxy ips
+
+  # Only allow outgoing connections to other docker containers
+  internal-in-no-external-out:
+    name: internal-in-no-external-out
+    driver: bridge
+    internal: true

@@ -1,0 +1,70 @@
+---
+version: "3"
+services:
+
+  ## ###############
+  ## Nginx proxy
+  ## ###############
+  swag:
+    image: lscr.io/linuxserver/swag:latest
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - sendy_apache
+      - sendy_mysql
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=${PROXY_SERVER_DOMAIN}
+      - VALIDATION=http
+      - SUBDOMAINS=${SENDY_SUBDOMAIN} #optional
+      - ONLY_SUBDOMAINS=true #optional
+    volumes:
+      # New style where we mount the host (repo) to guest
+      - ./swag:/config
+    ports:
+      - 443:443
+      - 80:80 # used for validation if VALIDATION=http
+    networks:
+      - internal-in-external-out
+      - internal-in-no-external-out
+    restart: unless-stopped
+
+  ## ###############
+  ## Sendy
+  ## ###############
+  sendy_apache:
+    container_name: sendy_apache
+    build:
+      args:
+        - SENDY_LICENSE_KEY=${SENDY_LICENSE_KEY}
+    depends_on:
+      - sendy_mysql
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./sendy/config.php:/var/www/html/includes/config.php
+      - ./sendy/uploads:/var/www/html/uploads
+      - ./sendy/apache2.conf:/etc/apache2/apache2.conf
+    networks:
+      - internal-in-no-external-out
+      - internal-in-external-out
+    restart: unless-stopped
+
+  sendy_mysql:
+    container_name: sendy_mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SENDY_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: sendy_mail
+      MYSQL_USER: sendyuser
+      MYSQL_PASSWORD: ${SENDY_MYSQL_PASSWORD}
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./database-imports:/docker-entrypoint-initdb.d
+    networks:
+      - internal-in-no-external-out
+    restart: unless-stopped
