@@ -4,10 +4,10 @@ The goal of this repository is to automate the setting up of a `docker-compose` 
 
 Advantages of this docker stack:
 
-✅ Downloads the latest sendy for you
-✅ Configuration is done through a `.env` file and is easy to manage
-✅ Automatically sets up a reverse proxy with (free) TLS certificates
-✅ Allows easy import of your old sendy database (see [database-imports](database-imports/README.md))
+- [x] Downloads the latest sendy for you
+- [x] Configuration is done through a `.env` file and is easy to manage
+- [x] Automatically sets up a reverse proxy with (free) TLS certificates
+- [x] Allows easy import of your old sendy database (see [database-imports](database-imports/README.md))
 
 ## Usage
 
