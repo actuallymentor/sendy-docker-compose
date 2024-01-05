@@ -33,3 +33,12 @@ This script suite:
 2. You have a server with a public IP address (recommended: Ubuntu 22.04 server with a public IP address, minimum of 1G RAM)
 3. You have a subdomain pointing to the server
 4. You have a valid sendy license key for your domain
+
+## Extending this docker stack
+
+If you intend to run other services on the same server (for example a URL shortener), you can extend this docker stack by changing two things:
+
+1. Create a new docker compose file in the format `docker-compose.YOUR_SERVICE_NAME.yml`
+    - Remember to add the `networks` section to the file
+2. Create a new proxy config, see `swag/nginx/proxy-confs/`
+3. Add your subdomains to the `ADDITIONAL_SUBDOMAINS` variable in the `.env` file

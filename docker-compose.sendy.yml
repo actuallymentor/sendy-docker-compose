@@ -3,36 +3,6 @@ version: "3"
 services:
 
   ## ###############
-  ## Nginx proxy
-  ## ###############
-  swag:
-    image: lscr.io/linuxserver/swag:latest
-    container_name: swag
-    cap_add:
-      - NET_ADMIN
-    depends_on:
-      - sendy_apache
-      - sendy_mysql
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - URL=${PROXY_SERVER_DOMAIN}
-      - VALIDATION=http
-      - SUBDOMAINS=${SENDY_SUBDOMAIN} #optional
-      - ONLY_SUBDOMAINS=true #optional
-    volumes:
-      # New style where we mount the host (repo) to guest
-      - ./swag:/config
-    ports:
-      - 443:443
-      - 80:80 # used for validation if VALIDATION=http
-    networks:
-      - internal-in-external-out
-      - internal-in-no-external-out
-    restart: unless-stopped
-
-  ## ###############
   ## Sendy
   ## ###############
   sendy_apache:
