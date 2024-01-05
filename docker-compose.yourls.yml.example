@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+
+  yourls:
+    image: yourls
+    container_name: yourls
+    restart: unless-stopped
+    environment:
+      YOURLS_DB_HOST: yourls_mysql
+      YOURLS_DB_PASS: ${YOURLS_DB_PASS}
+      YOURLS_SITE: https://links.yourdomain.com
+      YOURLS_USER: ${YOURLS_USER} # Create this variable in your .env
+      YOURLS_PASS: ${YOURLS_PASS} # Create this variable in your .env
+    networks:
+      - internal-in-no-external-out
+      - internal-in-external-out
+
+  yourls_mysql:
+    container_name: yourls_mysql
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${YOURLS_DB_PASS} # Create this variable in your .env
+      MYSQL_DATABASE: yourls
+    volumes:
+      - ./yourls_mysql:/var/lib/mysql
+    networks:
+      - internal-in-no-external-out
