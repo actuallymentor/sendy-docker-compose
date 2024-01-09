@@ -10,6 +10,7 @@ services:
     build:
       args:
         - SENDY_LICENSE_KEY=${SENDY_LICENSE_KEY}
+        - CACHEBUST=${CACHEBUST}
     depends_on:
       - sendy_mysql
     environment:
