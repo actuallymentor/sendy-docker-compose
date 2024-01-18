@@ -39,3 +39,25 @@ services:
     networks:
       - internal-in-no-external-out
     restart: unless-stopped
+  
+  # Cron manager for sendy
+  sendy_crontab:
+    container_name: sendy_crontab
+    build:
+      args:
+        - SENDY_LICENSE_KEY=${SENDY_LICENSE_KEY}
+        - CACHEBUST=${CACHEBUST}
+    command: [ "cron", "-f", "/etc/cron.d/sendy_cronjobs" ]
+    depends_on:
+      - sendy_mysql
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./sendy/config.php:/var/www/html/includes/config.php
+      - ./sendy/uploads:/var/www/html/uploads
+      - ./sendy/apache2.conf:/etc/apache2/apache2.conf
+    networks:
+      - internal-in-no-external-out
+      - internal-in-external-out
+    restart: unless-stopped

@@ -14,7 +14,7 @@ ARG USER_GID=1000
 RUN usermod -u $USER_UID www-data \
     && groupmod -g $USER_GID www-data
 
-# Install unzip
+# Install dependencies
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -54,6 +54,12 @@ RUN echo "Downloading https://sendy.co/download/?license=${SENDY_LICENSE_KEY}" \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     || echo "🚨 Something went wrong with the sendy download, if this is the first time you start this docker stack, this means sendy will not work. If this is not the first time, this means sendy did not auto-update. Please check if the link is live: https://sendy.co/download/?license=${SENDY_LICENSE_KEY}"
+
+# Set up crontab for background actions
+RUN apt-get install -y cron
+COPY ./sendy/sendy_cronjobs /etc/cron.d/sendy_cronjobs
+RUN chmod 0644 /etc/cron.d/sendy_cronjobs
+RUN crontab /etc/cron.d/sendy_cronjobs
 
 # HEALTHCHECK instruction to check the health of the container
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
