@@ -6,3 +6,6 @@ database-imports/*.sql
 
 # Ignore custom proxy configs
 swag/nginx/proxy-confs/*.conf
+
+# Ignore jail overrides
+swag/fail2ban

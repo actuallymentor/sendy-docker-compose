@@ -33,9 +33,11 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 if [ -z "$USER" ]; then
     USER=$(whoami)
 fi
-sudo groupadd docker || echo "Docker group already exists, proceeding"
+sudo groupadd docker &> /dev/null
 sudo usermod -aG docker $USER
-newgrp docker
+newgrp docker << EOF
+    sudo service docker start
+EOF
 
 # Start docker daemon
 echo -e "\nStarting docker daemon\n"

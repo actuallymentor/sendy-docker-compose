@@ -13,8 +13,8 @@ bash scripts/apply-configs.sh
 
 echo -e "\n\nStarting sendy docker stack\n\n"
 docker compose pull
-docker compose up -d --build
-# yes | docker system prune -a | grep 'Total reclaimed space'
+docker compose up -d --wait && \
+yes | docker system prune -a | grep 'Total reclaimed space'
 docker compose ps
 echo -e "\n\n✅ Docker stack started\n\n"
 echo -e "You can track the status of the docker stack by running: \ndocker compose logs -f"

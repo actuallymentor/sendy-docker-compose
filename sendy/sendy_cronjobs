@@ -1,14 +1,14 @@
 # For scheduling emails and sending campaigns in the background with auto-resume when server times out
-*/5 * * * * php /var/www/html/scheduled.php > /dev/null 2>&1
+*/5 * * * * /usr/local/bin/php /var/www/html/scheduled.php > /dev/null 2>&1
 
 # For Autoresponders to work
-*/1 * * * * php /var/www/html/autoresponders.php > /dev/null 2>&1
+*/1 * * * * /usr/local/bin/php /var/www/html/autoresponders.php > /dev/null 2>&1
 
 # For importing large CSVs in the background
-*/1 * * * * php /var/www/html/import-csv.php > /dev/null 2>&1
+*/1 * * * * /usr/local/bin/php /var/www/html/import-csv.php > /dev/null 2>&1
 
 # For automatic updating of segments periodically
-*/15 * * * * php /var/www/html/update-segments.php > /dev/null 2>&1
+*/15 * * * * /usr/local/bin/php /var/www/html/update-segments.php > /dev/null 2>&1
 
 # Healthcheck
 * * * * * /bin/bash -l -c 'date > ~/cron-timestamp.txt'

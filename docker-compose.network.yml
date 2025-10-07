@@ -12,7 +12,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.28.0.0/16 # Subnet ips are presedined here so swag knows what are trusted proxy ips
+        - subnet: 172.28.0.0/16 # Subnet ips are predefined here so swag knows what are trusted proxy ips
 
   # Only allow outgoing connections to other docker containers
   internal-in-no-external-out:
